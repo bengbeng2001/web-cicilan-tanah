@@ -1,0 +1,2 @@
+-- Data contoh untuk lokal bisa ditaruh di sini.
+-- Opsi DP/tenor dan pengaturan denda sudah dipasang oleh migrasi.

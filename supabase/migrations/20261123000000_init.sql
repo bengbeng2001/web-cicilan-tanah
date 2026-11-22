@@ -124,6 +124,13 @@ insert into public.pengaturan (kunci, nilai) values
   ('rekening', '{"bank":"BRI","nomor":"0000-0000-0000","atas_nama":"NAMA PEMILIK"}'::jsonb)
 on conflict (kunci) do nothing;
 
+-- Opsi awal PRD: DP 10/20/30/50% x tenor 12/24/36 bulan (kavling_id null = umum).
+insert into public.opsi_cicilan (kavling_id, dp_persen, tenor_bulan, aktif)
+select null, d.dp, t.tenor, true
+from (values (10), (20), (30), (50)) as d(dp)
+cross join (values (12), (24), (36)) as t(tenor)
+on conflict do nothing;
+
 -- ---------------------------------------------------------------------------
 -- Helper (SECURITY DEFINER: menghindari rekursi RLS saat membaca profiles)
 -- ---------------------------------------------------------------------------
@@ -178,7 +185,10 @@ create trigger on_auth_user_created after insert on auth.users
 create or replace function public.guard_profile_role() returns trigger
 language plpgsql as $$
 begin
-  if new.role is distinct from old.role and not public.is_admin() then
+  -- auth.uid() null = perubahan dari SQL Editor/service role, bukan dari pengguna login.
+  if new.role is distinct from old.role
+     and auth.uid() is not null
+     and not public.is_admin() then
     raise exception 'Hanya admin yang dapat mengubah peran';
   end if;
   return new;
@@ -386,7 +396,7 @@ begin
     diverifikasi_oleh = null,
     tgl_verifikasi = null,
     no_kwitansi = null
-  where public.pembayaran.status = 'ditolak'
+  where pembayaran.status = 'ditolak'
   returning id into v_pembayaran_id;
 
   if v_pembayaran_id is null then
