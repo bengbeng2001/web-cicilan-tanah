@@ -43,7 +43,7 @@ Trigger `guard_profile_role` hanya menolak perubahan role dari pengguna login ya
 
 ## Tema
 
-Tombol di kanan atas mengganti terang/gelap dan menyimpan pilihan di `localStorage`. Default saat pertama buka adalah terang.
+Tombol di kanan bawah mengganti terang/gelap dan menyimpan pilihan di `localStorage`. Default saat pertama buka adalah terang.
 
 ## Auth & pembatasan peran
 
@@ -91,4 +91,33 @@ Kolom di `kavlings`: `denda_persen_per_minggu`, `denda_maks_persen`, `masa_tengg
 ## Status
 
 Semua alur inti PRD fase 1 sudah dibuat: schema + RLS, auth dan pembatasan peran, kelola kavling dan denda per kavling, denah, pemesanan dan simulasi cicilan, unggah bukti, verifikasi pembayaran, serta unduh kwitansi PDF.
-# web-cicilan-tanah
+## Konvensi commit
+
+Pesan commit mengikuti [Conventional Commits v1.0.0](https://www.conventionalcommits.org/en/v1.0.0/#summary):
+
+```
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+Jenis yang dipakai di proyek ini:
+
+- `feat` — fitur baru
+- `fix` — perbaikan bug
+- `docs` — perubahan dokumentasi
+- `refactor` — ubah struktur kode tanpa mengubah perilaku
+- `test` — tambah/ubah pengujian
+- `chore` — dependency, konfigurasi, dan pekerjaan pendukung lain
+
+Contoh:
+
+```
+feat(kavling): tambah form denda per kavling
+fix(auth): perbaiki guard peran saat promosi admin lewat SQL Editor
+docs: tambahkan panduan migrasi Supabase online
+```
+
+Perubahan yang breaking ditandai dengan `!` sebelum titik dua, misalnya `feat(api)!: ganti format argumen create_pemesanan`, atau footer `BREAKING CHANGE: <penjelasan>`.
